@@ -90,14 +90,10 @@ E.V.A. is a futuristic, voice-enabled virtual assistant built using Node.js, Exp
 - The web UI requires **Chrome or Edge** (SpeechRecognition API support).
 - The Groq API must be set up correctly with access to the **LLaMA-3** model.
 
-## 📸 UI Screenshot
-
-> *(Add a screenshot of the UI here)*
-
 ## 🧑‍💻 Author
 
 **Prashant Sali**  
-[LinkedIn](https://www.linkedin.com/) | [GitHub](https://github.com/your-username)
+[LinkedIn](https://www.linkedin.com/in/prashant-sali-8aa0091b6) | [GitHub](https://github.com/Prash-Sali)
 
 ## 📄 License
 
