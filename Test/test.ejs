@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voice Reactive Waveform</title>
+<style>
+  body {
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .waveform {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .bar {
+    background: white;
+    border-radius: 20px;
+    width: 14px;
+    transition: height 0.1s ease;
+  }
+
+  .small {
+    width: 12px;
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+<button id="startBtn" style="margin-bottom: 20px;">Start Waveform</button>
+<div class="waveform">
+  <div class="bar small"></div>
+  <div class="bar small"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar small"></div>
+  <div class="bar small"></div>
+</div>
+
+<script>
+  const bars = document.querySelectorAll(".bar");
+  const startBtn = document.getElementById("startBtn");
+
+  startBtn.addEventListener("click", () => {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      audioCtx.resume(); // Ensure context is running
+      const source = audioCtx.createMediaStreamSource(stream);
+      const analyser = audioCtx.createAnalyser();
+
+      source.connect(analyser);
+      analyser.fftSize = 256;
+
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        analyser.getByteFrequencyData(dataArray);
+
+        // Average volume
+        let avg = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+          avg += dataArray[i];
+        }
+        avg = avg / dataArray.length;
+
+        // Change bar heights
+        bars.forEach((bar, index) => {
+          let height = Math.max(5, avg + (Math.sin(Date.now() / 100 + index) * 20));
+          if (bar.classList.contains("small")) {
+            height = Math.max(8, avg / 3); // small circles
+            bar.style.height = height + "px";
+            bar.style.width = height + "px";
+          } else {
+            bar.style.height = height + "px";
+          }
+        });
+      }
+
+      animate();
+    }).catch(err => {
+      console.error('Microphone access denied:', err);
+      alert('Please allow microphone access for this to work.');
+    });
+    startBtn.style.display = "none";
+  });
+</script>
+
+</body>
+</html>

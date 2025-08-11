@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E.V.A. Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap");
+
+      body {
+        font-family: "Orbitron", sans-serif;
+      }
+
+      .neon-text {
+        text-shadow: 0 0 5px #00eaff, 0 0 10px #00eaff, 0 0 20px #00eaff;
+      }
+
+      .neon-btn {
+        box-shadow: 0 0 8px #00eaff, 0 0 12px #00eaff;
+      }
+
+      .pulse-animation {
+        animation: pulse 1s infinite alternate;
+      }
+
+      @keyframes pulse {
+        0% {
+          text-shadow: 0 0 5px #00eaff, 0 0 10px #00eaff;
+        }
+        100% {
+          text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff;
+        }
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center h-screen bg-black">
+    <div
+      class="text-center p-8 rounded-3xl shadow-lg bg-white/5 backdrop-blur-md border border-white/10 w-96"
+    >
+      <h1 class="text-3xl font-bold neon-text mb-4">E.V.A. AI</h1>
+
+      <button
+        id="startRecognition"
+        class="bg-transparent neon-btn border-2 border-cyan-400 text-cyan-400 font-bold py-2 px-6 rounded-lg transition duration-300 hover:bg-cyan-400 hover:text-black"
+      >
+        🎙 Activate Listening
+      </button>
+
+      <p
+        id="textData"
+        class="mt-4 text-cyan-300 text-lg font-semibold opacity-80"
+      >
+        Awaiting Command...
+      </p>
+    </div>
+
+    <script>
+      const start = document.getElementById("startRecognition");
+      const textData = document.getElementById("textData");
+
+      start.addEventListener("click", async () => {
+        console.log("Listening for Command...");
+        textData.classList.add("pulse-animation");
+
+        const recognition = new webkitSpeechRecognition();
+
+        recognition.onresult = async ({ results }) => {
+          const recognizedText = results[0][0].transcript;
+          textData.classList.remove("pulse-animation");
+          textData.textContent = "🗣 " + recognizedText;
+
+          try {
+            await fetch("http://localhost:8080/eva/virtualAssistant", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ text: recognizedText }),
+            });
+          } catch (error) {
+            console.log(error);
+            textData.textContent = "⚠️ Error sending request.";
+          }
+        };
+
+        recognition.start();
+      });
+    </script>
+  </body>
+</html>
