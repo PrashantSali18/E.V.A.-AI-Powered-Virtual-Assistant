@@ -30,7 +30,7 @@ E.V.A. is a futuristic, voice-enabled virtual assistant built using Node.js, Exp
 
 1. **Clone this repository**
    ```bash
-   git clone https://github.com/your-username/eva-voice-assistant.git
+   git clone https://github.com/Prash-Sali/E.V.A.-AI-Powered-Virtual-Assistant
    cd eva-voice-assistant
    ```
 
@@ -43,8 +43,8 @@ E.V.A. is a futuristic, voice-enabled virtual assistant built using Node.js, Exp
    Create a `.env` file in the root:
    ```env
    PORT=8080
-   NEWS_API=your_newsapi_key
-   GROQ_API=your_groq_api_key
+   NEWS_API=your_newsapi_key  # Get it From https://newsapi.org
+   GROQ_API=your_groq_api_key # Get it From https://console.groq.com
    ```
 
 4. **Start the server**
