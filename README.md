@@ -94,7 +94,3 @@ E.V.A. is a futuristic, voice-enabled virtual assistant built using Node.js, Exp
 
 **Prashant Sali**  
 [LinkedIn](https://www.linkedin.com/in/prashant-sali-8aa0091b6) | [GitHub](https://github.com/Prash-Sali)
-
-## 📄 License
-
-This project is licensed under the **ISC License**.
